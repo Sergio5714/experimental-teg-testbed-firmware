@@ -22,14 +22,14 @@
 
 //--------------------------------------------- USART modules ------------------------------------------------//
 
-#define COM_USART_MODULE                 USART1
-#define COM_USART_IRQN                   USART1_IRQn
+#define COM_USART_MODULE                 USART2
+#define COM_USART_IRQN                   USART2_IRQn
 #define COM_USART_BAUDRATE               250000
 #define COM_USART_PIN_AF                 GPIO_AF_USART1
-#define COM_USART_TX_PIN_PORT            GPIOB
-#define COM_USART_TX_PIN_NUMBER          GPIO_Pin_6
-#define COM_USART_RX_PIN_PORT            GPIOB
-#define COM_USART_RX_PIN_NUMBER          GPIO_Pin_7
+#define COM_USART_TX_PIN_PORT            GPIOD
+#define COM_USART_TX_PIN_NUMBER          GPIO_Pin_5
+#define COM_USART_RX_PIN_PORT            GPIOD
+#define COM_USART_RX_PIN_NUMBER          GPIO_Pin_6
 
 //--------------------------------------------- SPI module ---------------------------------------------------//
 
@@ -60,6 +60,21 @@
 #define LED_CH2_PWM_PIN                  GPIO_Pin_13
 #define LED_CH3_PWM_PIN                  GPIO_Pin_14
 #define LED_CH4_PWM_PIN                  GPIO_Pin_15
+
+//--------------------------------------------- Fan PWM control  ----------------------------------------------//
+
+// ARR = 42000, PSC = 2, fapb1 = 42 MHZ, PWM frequency = 1000 Hz
+#define FAN_PWM_TIM_MODULE               TIM2
+#define FAN_PWM_TIM_PSC                  0x02
+#define FAN_PWM_TIM_ARR                  0xA410
+#define FAN_PWM_PIN_AF                   GPIO_AF_TIM2
+
+#define FAN_CH1_NUMBER                   0x02
+#define FAN_CH2_NUMBER                   0x04
+
+#define FAN_CH_PWM_PORT                  GPIOA
+#define FAN_CH1_PWM_PIN                  GPIO_Pin_1
+#define FAN_CH2_PWM_PIN                  GPIO_Pin_3
 
 //--------------------------------------------- Timer for temperature measurements (10 Hz) -------------------//
 

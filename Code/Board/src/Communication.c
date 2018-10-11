@@ -135,8 +135,8 @@ void sendAnswer(uint8_t command, uint8_t* params, uint8_t numberOfParams)
 	return;
 }
 
-// Interrupt handler for receiving data from Raspberry Pi (COM_USART_MODULE = USART1)
-void USART1_IRQHandler ()
+// Interrupt handler(COM_USART_MODULE = USART2)
+void USART2_IRQHandler ()
 {
 	if (READ_BIT(COM_USART_MODULE->SR, USART_SR_RXNE))
 	{

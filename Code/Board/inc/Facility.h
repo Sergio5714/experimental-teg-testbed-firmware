@@ -7,9 +7,11 @@
 #include "Interrupts.h"
 
 //--------------------------------------------- MACROS ----------------------------------------------------------//
-#define NUMBER_OF_SENSORS      8
+#define NUMBER_OF_SENSORS                     8
 
-# define PERIOD_OF_MEASUREMENTS_TENTH_OF_MS    1000
+#define PERIOD_OF_MEASUREMENTS_TENTH_OF_MS    1000
+
+#define EXP_FILTER_ALPHA                      0.5f
 
 typedef struct
 {
@@ -42,15 +44,18 @@ typedef struct
 	uint8_t availability[NUMBER_OF_SENSORS];
 	Temp_Sensor_Error_Typedef errorFlags[NUMBER_OF_SENSORS];
 	float temperatures [NUMBER_OF_SENSORS];
+	float prevTemperatures [NUMBER_OF_SENSORS];
 }Temp_Sensors_Typedef;
 
 //--------------------------------------------- FUNCTIONS ------------------------------------------------------//
 void tempSensorsStartMeasurements(void);
 void tempSensorsReadTemperatures(void);
 void tempSensorsInit(void);
+void filterTemperatures(void);
 
 // Init pid regulator
-void pidInit(Pid_Regulator_Struct_Typedef* pidRegulator);
+void pidInit(Pid_Regulator_Struct_Typedef* pidRegulator, float k, float d, float i, 
+             float minOutput, float maxOutput, float maxSumError);
 	
 // Calculate PID regulator
 void pidCalc(Pid_Regulator_Struct_Typedef* pidRegulator);

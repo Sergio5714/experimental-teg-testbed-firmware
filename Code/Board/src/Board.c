@@ -39,8 +39,8 @@ void boardInitAll()
 	
 	// Settings for pins
 	// Base Init
-	gpioInitPin(COM_USART_TX_PIN_PORT, COM_USART_TX_PIN_NUMBER, GPIO_MODE_AF, GPIO_OUTPUT_MODE_PP, GPIO_PUPD_UP);
-	gpioInitPin(COM_USART_RX_PIN_PORT, COM_USART_RX_PIN_NUMBER, GPIO_MODE_AF, GPIO_OUTPUT_MODE_PP, GPIO_PUPD_UP);
+	gpioInitPin(COM_USART_TX_PIN_PORT, COM_USART_TX_PIN_NUMBER, GPIO_MODE_AF, GPIO_OUTPUT_MODE_PP, GPIO_PUPD_NOPULL);
+	gpioInitPin(COM_USART_RX_PIN_PORT, COM_USART_RX_PIN_NUMBER, GPIO_MODE_AF, GPIO_OUTPUT_MODE_PP, GPIO_PUPD_NOPULL);
 	
 	// Set alternatife function
 	gpioInitPinAf(COM_USART_TX_PIN_PORT, COM_USART_TX_PIN_NUMBER, COM_USART_PIN_AF);
@@ -83,6 +83,23 @@ void boardInitAll()
 	timInitBase(LED_PWM_TIM_MODULE, &timSettings);
 	timInitPwm(LED_PWM_TIM_MODULE, &timSettings, (float[4]){0.0, 0.0, 0.0, 0.0}, (uint8_t[4]){0x01, 0x01, 0x01, 0x01});
 	
+	//--------------------------------------------- Initialization of PWM channels for LED control --------------//
+	
+	// Settings for pins
+	// Base initialization of PWM pins
+	gpioInitPin(FAN_CH_PWM_PORT, FAN_CH1_PWM_PIN,GPIO_MODE_AF, GPIO_OUTPUT_MODE_PP, GPIO_PUPD_NOPULL);
+	gpioInitPin(FAN_CH_PWM_PORT, FAN_CH2_PWM_PIN,GPIO_MODE_AF, GPIO_OUTPUT_MODE_PP, GPIO_PUPD_NOPULL);
+	
+	// Set alternative function for PWM pins
+	gpioInitPinAf(FAN_CH_PWM_PORT, FAN_CH1_PWM_PIN, FAN_PWM_PIN_AF);
+	gpioInitPinAf(FAN_CH_PWM_PORT, FAN_CH2_PWM_PIN, FAN_PWM_PIN_AF);
+
+	// Initialize timer module for PWM
+	timSettings.TIM_Period = FAN_PWM_TIM_ARR;
+	timSettings.TIM_Prescaler = FAN_PWM_TIM_PSC;
+	timInitBase(FAN_PWM_TIM_MODULE, &timSettings);
+	timInitPwm(FAN_PWM_TIM_MODULE, &timSettings, (float[4]){0.0, 0.0, 0.0, 0.0}, (uint8_t[4]){0x00, 0x01, 0x00, 0x01});
+	
 	//--------------------------------------------- Temperature measurements timer initialization -----------------//
 	
 	timSettings.TIM_Period = TEMP_MEASUREMENTS_TIM_ARR;
@@ -119,6 +136,7 @@ void boardInitAll()
 	
 	// Enable timers
 	timEnable(LED_PWM_TIM_MODULE);
+	timEnable(FAN_PWM_TIM_MODULE);
 	
 	// Enable Local time timer
 	timEnable(LOCAL_TIME_TIM_MODULE);
@@ -132,15 +150,15 @@ void boardInitAll()
 	__NVIC_EnableIRQ(COM_USART_IRQN);
 	__NVIC_EnableIRQ(LOCAL_TIME_IRQN);
 	__NVIC_EnableIRQ(I2C_MODULE_ERROR_IRQN);
-	__NVIC_EnableIRQ(TEMP_MEASUREMENTS_IRQN);
+	//__NVIC_EnableIRQ(TEMP_MEASUREMENTS_IRQN);
 	
 	
 	//--------------------------------------------- Set prority -------------------------------------------------//
 	// Priority
 	__NVIC_SetPriority(COM_USART_IRQN, 0X01);
 	__NVIC_SetPriority(LOCAL_TIME_IRQN, 0X02);
-	__NVIC_SetPriority(I2C_MODULE_ERROR_IRQN, 0X03);
-	__NVIC_SetPriority(TEMP_MEASUREMENTS_IRQN, 0X04);
+	__NVIC_SetPriority(I2C_MODULE_ERROR_IRQN, 0X02);
+	//__NVIC_SetPriority(TEMP_MEASUREMENTS_IRQN, 0X08);
 	
 	// Global enable
 	__enable_irq();

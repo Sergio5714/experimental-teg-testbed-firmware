@@ -2,6 +2,10 @@
 #include "Board.h"
 #include "Communication.h"
 
+#include "FreeRTOS.h"
+#include "task.h"
+#include "queue.h"
+
 #include "Si7051.h"
 #include "I2C_switcher.h"
 #include "AD7705.h"
@@ -25,6 +29,123 @@ Pid_Regulator_Struct_Typedef tempRegulatorCold;
 extern Temp_Sensors_Typedef tempSensors;
 
 uint8_t selector;
+uint16_t counter;
+
+void taskReadTemps(void * arg)
+{
+	while(1)
+	{
+		if (tempSensors.errorFlags[5] == TEMP_SENSOR_MEASURING)
+		{
+			// Read temperatures
+			tempSensorsReadTemperatures();
+			// Filter value
+			filterTemperatures();
+		}
+		
+		// Start temperature measurements
+		tempSensorsStartMeasurements();
+		
+		tempRegulatorHot.current = tempSensors.temperatures[7];
+		
+		tempRegulatorCold.current = tempSensors.temperatures[5];
+		
+		pidCalc(&tempRegulatorHot);
+		pidCalc(&tempRegulatorCold);
+
+		// DAC
+		DAC->DHR12R2 = ((uint16_t)((tempRegulatorHot.output / 3.0f) * 4095)) & 0xfff;
+		DAC->DHR12R1 = ((uint16_t)((tempRegulatorCold.output / 3.0f) * 4095)) & 0xfff;
+		
+		// Software trigger
+		DAC->SWTRIGR |= DAC_SWTRIGR_SWTRIG1 | DAC_SWTRIGR_SWTRIG2;
+		
+		vTaskDelay(100);
+	}
+	vTaskDelete( NULL );
+}
+void taskCheckFan(void * arg)
+{
+	while(1)
+	{
+		float dutyCycle = (tempRegulatorCold.output + tempRegulatorHot.output)/ (tempRegulatorCold.maxOutput + tempRegulatorHot.maxOutput);
+		if (dutyCycle > 0.2f)
+		{
+			timPwmChangeDutyCycle(FAN_PWM_TIM_MODULE, FAN_CH1_NUMBER , 1.0f);
+		}
+		else
+		{
+			timPwmChangeDutyCycle(FAN_PWM_TIM_MODULE, FAN_CH1_NUMBER , 0.0f);
+		}
+		vTaskDelay(10000);
+	}
+	vTaskDelete( NULL );
+}
+
+void taskReadVoltages(void * arg)
+{
+	while(1)
+	{
+		if (counter < 2)
+		{
+			counter++;
+		}
+		switch(selector)
+		{
+			case 0x00:
+			{
+				if(counter < 2)
+				{
+					float tempValue;
+					adcReadResult(ADC_CHN_AIN1, &tempValue);
+				}
+				else
+				{
+					adcReadResult(ADC_CHN_AIN1, &voltagesADC[0]);
+				}
+				counter++;
+				break;
+			}
+			case 0x01:
+			{
+				if(counter < 2)
+				{
+					float tempValue;
+					adcReadResult(ADC_CHN_AIN2, &tempValue);
+				}
+				else
+				{
+					adcReadResult(ADC_CHN_AIN2, &voltagesADC[1]);
+				}
+				counter++;
+				break;
+			}
+		}
+		// Change channel
+		if(counter == 5)
+		{
+			if (selector == 0)
+				selector = 1;
+			else if (selector == 1)
+				selector = 0;
+			counter = 0;
+		}
+		vTaskDelay(50);
+	}
+	vTaskDelete( NULL );
+}
+
+
+void taskUartProcessing(void * arg)
+{
+	while (1)
+	{
+		getPackage();
+		checkCommandAndExecute();
+		vTaskDelay(20);
+	}
+	vTaskDelete( NULL );
+}
 
 void dacInit()
 {
@@ -46,9 +167,9 @@ void dacInit()
 	DAC->CR |= DAC_CR_EN2;
 }
 
-int main()
-{	
-	// Init everything 
+void setup(void)
+{
+	// Init board perpherial
     boardInitAll();
 	
 	delayInTenthOfMs(20); // 2 ms
@@ -65,68 +186,58 @@ int main()
 	adcReset();
 	
 	// Init channels of ADC
-	adcInit(ADC_CHN_AIN2, ADC_UPDATE_RATE_25);
-	adcInit(ADC_CHN_AIN1, ADC_UPDATE_RATE_25);
+	if(adcInit(ADC_CHN_AIN2, ADC_UPDATE_RATE_25) == ERROR)
+	{
+		// Error
+		timPwmChangeDutyCycle(LED_PWM_TIM_MODULE, TIM_PWM_CHANNEL_1, 0.8);
+	};
+	if (adcInit(ADC_CHN_AIN1, ADC_UPDATE_RATE_25) == ERROR)
+	{
+		// Error
+		timPwmChangeDutyCycle(LED_PWM_TIM_MODULE, TIM_PWM_CHANNEL_1, 0.8);
+	};
 	
 	// Initialization of internal DAC
 	dacInit();
 	
-	
-	pidInit(&tempRegulatorHot);
-	pidInit(&tempRegulatorCold);
+	// Temperature control init
+	pidInit(&tempRegulatorHot, 10.0f, 50.0f, 0.04f, 0.0f, 2.0f, 30.0f);
+	pidInit(&tempRegulatorCold, -10.0f, -50.0f, -0.04f, 0.0f, 2.0f, 30.0f);
 	
 	// Enable timer for temp sensors
-	timEnable(TEMP_MEASUREMENTS_TIM_MODULE);
+	//timEnable(TEMP_MEASUREMENTS_TIM_MODULE);	
+}
+
+int main()
+{	
+	// Setup all
+	setup();
+	
+	if (xTaskCreate(taskReadTemps, "Temperature measurements", 128, NULL, 1, NULL) != pdTRUE)
+	{
+		// Error
+		timPwmChangeDutyCycle(LED_PWM_TIM_MODULE, TIM_PWM_CHANNEL_1, 0.8);
+	}
+	
+	if (xTaskCreate(taskReadVoltages, "Voltage measurements", 128, NULL, 1, NULL) != pdTRUE)
+	{
+		// Error
+		timPwmChangeDutyCycle(LED_PWM_TIM_MODULE, TIM_PWM_CHANNEL_1, 0.8);
+	}
+	if (xTaskCreate(taskUartProcessing, "Uart", 128, NULL, 1, NULL) != pdTRUE)
+	{
+		// Error
+		timPwmChangeDutyCycle(LED_PWM_TIM_MODULE, TIM_PWM_CHANNEL_1, 0.8);
+	}
+	if (xTaskCreate(taskCheckFan, "Fan", 128, NULL, 1, NULL) != pdTRUE)
+	{
+		// Error
+		timPwmChangeDutyCycle(LED_PWM_TIM_MODULE, TIM_PWM_CHANNEL_1, 0.8);
+	}
+	vTaskStartScheduler();
 	
 	while (1)
 	{
-		/*
-//		adcReadResult(ADC_CHN_AIN1, &result);
-//		
-//		dutyCycle = result/0.1f;
-//		
-//		if( dutyCycle > 1.0)
-//		{
-//			dutyCycle = 1.0;
-//		}
-//		
-//		timPwmChangeDutyCycle(LED_PWM_TIM_MODULE, TIM_PWM_CHANNEL_1, dutyCycle);
-//		timPwmChangeDutyCycle(LED_PWM_TIM_MODULE, TIM_PWM_CHANNEL_2, 0.0f);
-//		timPwmChangeDutyCycle(LED_PWM_TIM_MODULE, TIM_PWM_CHANNEL_3, 0.0f);
-//		timPwmChangeDutyCycle(LED_PWM_TIM_MODULE, TIM_PWM_CHANNEL_4, 0.0f);
-//		
-//		if (dutyCycle > 0.2)
-//		{
-//			timPwmChangeDutyCycle(LED_PWM_TIM_MODULE, TIM_PWM_CHANNEL_2, dutyCycle);
-//		}
-//		if (dutyCycle > 0.4)
-//		{
-//			timPwmChangeDutyCycle(LED_PWM_TIM_MODULE, TIM_PWM_CHANNEL_3, dutyCycle);
-//		}
-//		if (dutyCycle > 0.6)
-//		{
-//			timPwmChangeDutyCycle(LED_PWM_TIM_MODULE, TIM_PWM_CHANNEL_4, dutyCycle);
-//		}
-//		
-*/		
-//		// Start temperature measurements
-//		tempSensorsStartMeasurements();
 		
-//		// Wait for measurements
-//		delayInTenthOfMs(1000); // 100 ms
-		
-		NVIC_DisableIRQ(TEMP_MEASUREMENTS_IRQN);
-		if (selector == 0x00)
-		{
-			adcReadResult(ADC_CHN_AIN1, &voltagesADC[0]);
-		}
-		else
-		{
-			adcReadResult(ADC_CHN_AIN2, &voltagesADC[1]);
-		}
-//		//adcReadResult(ADC_CHN_AIN2, &voltagesADC[1]);
-		NVIC_EnableIRQ(TEMP_MEASUREMENTS_IRQN);
-//		
-		delayInTenthOfMs(300); // 30 ms
 	}
 }

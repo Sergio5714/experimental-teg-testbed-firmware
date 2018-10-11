@@ -6,9 +6,9 @@
 #include "Facility.h"
 
 
-// Interrupt handler for receiving data from High level (DEBUG_USART_MODULE = USART1)
+// Interrupt handler for receiving data from High level (DEBUG_USART_MODULE = USART2)
 // This Interrupt is implemented in Communication.c
-void USART1_IRQHandler(void);
+void USART2_IRQHandler(void);
 
 // Interrupt handler for I2C errors
 void I2C3_ER_IRQHandler(void);

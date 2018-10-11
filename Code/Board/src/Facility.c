@@ -73,15 +73,33 @@ void tempSensorsInit()
 	return;
 }
 
-// Init pid regulator
-void pidInit(Pid_Regulator_Struct_Typedef* pidRegulator)
+void filterTemperatures(void)
 {
-	pidRegulator->pk = 10.0f;
-	pidRegulator->dk = 50.0f;
-	pidRegulator->ik = 0.04f;
-	pidRegulator->maxOutput = 2.0;
-	pidRegulator->minOutput = 0.0;
-	pidRegulator->maxSumError = 30;
+	uint8_t i;
+	float tempValue;
+	for ( i = 0; i < NUMBER_OF_SENSORS; i++)
+	{
+		if (tempSensors.availability[i] == 1)
+		{
+			tempValue = tempSensors.temperatures[i];
+			tempSensors.temperatures[i] = EXP_FILTER_ALPHA * tempSensors.temperatures[i] +
+		                               (1.0f - EXP_FILTER_ALPHA) * tempSensors.prevTemperatures[i];
+			tempSensors.prevTemperatures[i] = tempValue;
+		}
+	}
+	return;
+}
+
+// Init pid regulator
+void pidInit(Pid_Regulator_Struct_Typedef* pidRegulator, float k, float d, float i, 
+             float minOutput, float maxOutput, float maxSumError)
+{
+	pidRegulator->pk = k;
+	pidRegulator->dk = d;
+	pidRegulator->ik = i;
+	pidRegulator->maxOutput = maxOutput;
+	pidRegulator->minOutput = minOutput;
+	pidRegulator->maxSumError = maxSumError;
 	pidRegulator->pidErrorEnd = 0.1;
 	return;
 }
@@ -120,16 +138,16 @@ void pidCalc(Pid_Regulator_Struct_Typedef* pidRegulator)
 		}
 
 		// If we reached accuracy of regulation that we need
-		if ((pidRegulator->output <= pidRegulator->pidOutputEnd) 
-			&&(pidRegulator->output >= -pidRegulator->pidOutputEnd) 
-			&&(error <= pidRegulator->pidErrorEnd) && (error >= -pidRegulator->pidErrorEnd))
-		{
-		  pidRegulator->pidFinish = 0x01;
-		}
-		else
-		{
-		  pidRegulator->pidFinish = 0x00;
-		}
+//		if ((pidRegulator->output <= pidRegulator->pidOutputEnd) 
+//			&&(pidRegulator->output >= -pidRegulator->pidOutputEnd) 
+//			&&(error <= pidRegulator->pidErrorEnd) && (error >= -pidRegulator->pidErrorEnd))
+//		{
+//		  pidRegulator->pidFinish = 0x01;
+//		}
+//		else
+//		{
+//		  pidRegulator->pidFinish = 0x00;
+//		}
 	}
 	else
 	{

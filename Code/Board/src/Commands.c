@@ -1,5 +1,7 @@
 #include "Commands.h"
 extern Command_Struct inputCommand;
+extern Pid_Regulator_Struct_Typedef tempRegulatorHot;
+extern Pid_Regulator_Struct_Typedef tempRegulatorCold;
 	
 void checkCommandAndExecute()
 {
@@ -20,7 +22,49 @@ void checkCommandAndExecute()
 			uint8_t* answer = (uint8_t*)&"ECHO";
 			sendAnswer(inputCommand.command, answer, 0x04);
 			break;
-		}	
+		}
+		case GET_TEMP:
+		{
+			if (inputCommand.numberOfreceivedParams != 0x01)
+				break;
+			uint8_t numberOfSensor = inputCommand.params[0];
+			if (numberOfSensor > 7)
+				break;
+			float answer = tempSensors.temperatures[numberOfSensor];
+			sendAnswer(inputCommand.command, (__packed uint8_t*)&answer, 0x04);
+			break;
+		}
+		case GET_VOLTAGE:
+		{
+			if (inputCommand.numberOfreceivedParams != 0x01)
+				break;
+			uint8_t numberOfSensor = inputCommand.params[0];
+			if (numberOfSensor > 1)
+				break;
+			float answer = voltagesADC[numberOfSensor];
+			sendAnswer(inputCommand.command, (__packed uint8_t*)&answer, 0x04);
+			break;
+		}
+		case SET_HOT_TARGET_TEMP:
+		{
+			if (inputCommand.numberOfreceivedParams != 0x04)
+				break;
+			tempRegulatorHot.target = *(__packed float*)(inputCommand.params);
+			tempRegulatorHot.pidOn = 0x01;
+			uint8_t* answer = (uint8_t*)&"OK";
+			sendAnswer(inputCommand.command, answer, 0x02);
+			break;
+		}
+		case SET_COLD_TARGET_TEMP:
+		{
+			if (inputCommand.numberOfreceivedParams != 0x04)
+				break;
+			tempRegulatorCold.target = *(__packed float*)(inputCommand.params);
+			tempRegulatorCold.pidOn = 0x01;
+			uint8_t* answer = (uint8_t*)&"OK";
+			sendAnswer(inputCommand.command, answer, 0x02);
+			break;
+		}
 //		case SET_PWM:
 //		{
 //			if (inputCommand.numberOfreceivedParams != 0x05)
