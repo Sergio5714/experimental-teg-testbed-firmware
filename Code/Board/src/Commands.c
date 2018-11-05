@@ -65,6 +65,16 @@ void checkCommandAndExecute()
 			sendAnswer(inputCommand.command, answer, 0x02);
 			break;
 		}
+		case SET_VAlUE_OF_SHIFT_REG:
+		{
+			if (inputCommand.numberOfreceivedParams != 0x02)
+				break;
+			uint16_t value = *(uint16_t*)inputCommand.params;
+			shiftRegShiftOut(value);
+			uint8_t* answer = (uint8_t*)&"OK";
+			sendAnswer(inputCommand.command, answer, 0x02);
+			break;
+		}
 //		case SET_PWM:
 //		{
 //			if (inputCommand.numberOfreceivedParams != 0x05)

@@ -11,6 +11,7 @@
 #include "AD7705.h"
 #include "Facility.h"
 #include "Interrupts.h"
+#include "Shift_reg.h"
 
 // I2C module for temperature sensor
 extern I2C_Module_With_State_Typedef I2CModule;
@@ -171,6 +172,9 @@ void setup(void)
 {
 	// Init board perpherial
     boardInitAll();
+	
+	// Init shift register
+	shiftRegSetup();
 	
 	delayInTenthOfMs(20); // 2 ms
 	
