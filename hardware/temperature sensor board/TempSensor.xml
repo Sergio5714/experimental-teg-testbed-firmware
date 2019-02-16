@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<export version="D">
+  <design>
+    <source>C:/Users/Sergey/OneDrive/Skoltech/Research/Term 4 research/Kicad project/TempSensor.sch</source>
+    <date>26/05/2018 18:05:58</date>
+    <tool>Eeschema 4.0.7</tool>
+    <sheet number="1" name="/" tstamps="/">
+      <title_block>
+        <title/>
+        <company/>
+        <rev/>
+        <date/>
+        <source>TempSensor.sch</source>
+        <comment number="1" value=""/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+      </title_block>
+    </sheet>
+  </design>
+  <components>
+    <comp ref="T1">
+      <value>Si7051</value>
+      <footprint>Temp_Sensor_library:DFN_6</footprint>
+      <libsource lib="Temp_Sensor_Components" part="Si7051"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5AEC6D3B</tstamp>
+    </comp>
+    <comp ref="P2">
+      <value>Temp_sensor_connector</value>
+      <footprint>Temp_Sensor_library:Temp_sensor_connector</footprint>
+      <libsource lib="Temp_Sensor_Components" part="Temp_sensor_connector"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B08094B</tstamp>
+    </comp>
+    <comp ref="P1">
+      <value>Temp_sensor_connector</value>
+      <footprint>Temp_Sensor_library:Temp_sensor_connector</footprint>
+      <libsource lib="Temp_Sensor_Components" part="Temp_sensor_connector"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B080ED3</tstamp>
+    </comp>
+    <comp ref="C1">
+      <value>0.1 μF</value>
+      <footprint>Capacitors_SMD:C_0603_HandSoldering</footprint>
+      <libsource lib="device" part="C"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B0887E3</tstamp>
+    </comp>
+    <comp ref="R1">
+      <value>10k</value>
+      <footprint>Resistors_SMD:R_0603_HandSoldering</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B088900</tstamp>
+    </comp>
+    <comp ref="R2">
+      <value>10k</value>
+      <footprint>Resistors_SMD:R_0603_HandSoldering</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5B0889FA</tstamp>
+    </comp>
+  </components>
+  <libparts>
+    <libpart lib="device" part="C">
+      <description>Unpolarized capacitor</description>
+      <footprints>
+        <fp>C_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">C</field>
+        <field name="Value">C</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="device" part="R">
+      <description>Resistor</description>
+      <footprints>
+        <fp>R_*</fp>
+        <fp>R_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">R</field>
+        <field name="Value">R</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Temp_Sensor_Components" part="Si7051">
+      <description>I2C Temperature sensor</description>
+      <footprints>
+        <fp>DFN_6</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">T</field>
+        <field name="Value">Si7051</field>
+      </fields>
+      <pins>
+        <pin num="1" name="SDA" type="input"/>
+        <pin num="2" name="GND" type="input"/>
+        <pin num="3" name="DNS" type="NotConnected"/>
+        <pin num="4" name="DNC" type="NotConnected"/>
+        <pin num="5" name="VDD" type="input"/>
+        <pin num="6" name="SCL" type="input"/>
+      </pins>
+    </libpart>
+    <libpart lib="Temp_Sensor_Components" part="Temp_sensor_connector">
+      <fields>
+        <field name="Reference">P</field>
+        <field name="Value">Temp_sensor_connector</field>
+      </fields>
+      <pins>
+        <pin num="1" name="GND" type="BiDi"/>
+        <pin num="2" name="SDA" type="BiDi"/>
+        <pin num="3" name="SCL" type="BiDi"/>
+        <pin num="4" name="VCC" type="BiDi"/>
+      </pins>
+    </libpart>
+  </libparts>
+  <libraries>
+    <library logical="Temp_Sensor_Components">
+      <uri>C:\Users\Sergey\OneDrive\Skoltech\Research\Term 4 research\Kicad project\Temp_Sensor_Components.lib</uri>
+    </library>
+    <library logical="device">
+      <uri>C:\Program Files\KiCad\share\kicad\library\device.lib</uri>
+    </library>
+  </libraries>
+  <nets>
+    <net code="1" name="Net-(T1-Pad3)">
+      <node ref="T1" pin="3"/>
+    </net>
+    <net code="2" name="Net-(T1-Pad4)">
+      <node ref="T1" pin="4"/>
+    </net>
+    <net code="3" name="GND">
+      <node ref="R1" pin="2"/>
+      <node ref="T1" pin="2"/>
+      <node ref="P2" pin="1"/>
+      <node ref="P1" pin="1"/>
+      <node ref="C1" pin="2"/>
+      <node ref="R2" pin="2"/>
+    </net>
+    <net code="4" name="Net-(P1-Pad2)">
+      <node ref="R2" pin="1"/>
+      <node ref="P1" pin="2"/>
+      <node ref="T1" pin="1"/>
+      <node ref="P2" pin="2"/>
+    </net>
+    <net code="5" name="Net-(C1-Pad1)">
+      <node ref="P2" pin="4"/>
+      <node ref="C1" pin="1"/>
+      <node ref="P1" pin="4"/>
+      <node ref="T1" pin="5"/>
+    </net>
+    <net code="6" name="Net-(P1-Pad3)">
+      <node ref="P1" pin="3"/>
+      <node ref="P2" pin="3"/>
+      <node ref="T1" pin="6"/>
+      <node ref="R1" pin="1"/>
+    </net>
+  </nets>
+</export>

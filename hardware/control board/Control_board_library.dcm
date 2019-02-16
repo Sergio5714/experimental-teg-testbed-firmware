@@ -1,0 +1,31 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP ADR441
+D 2.5V precise reference voltage source
+$ENDCMP
+#
+$CMP CWF-2
+D Socket on PCB
+$ENDCMP
+#
+$CMP CWF-4
+D Socket on PCB
+$ENDCMP
+#
+$CMP IRF530N
+D Power Mosfet
+$ENDCMP
+#
+$CMP LM317A
+D Voltage regulator
+$ENDCMP
+#
+$CMP LMC7101
+D Tiny Low Power Operational Amplifier with Rail-To-Rail
+$ENDCMP
+#
+$CMP PCA9548
+D I2C switcher 1->8
+$ENDCMP
+#
+#End Doc Library

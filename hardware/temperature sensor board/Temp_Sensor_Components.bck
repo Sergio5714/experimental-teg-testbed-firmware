@@ -1,0 +1,7 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP Si7051
+D I2C Temperature sensor
+$ENDCMP
+#
+#End Doc Library

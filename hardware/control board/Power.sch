@@ -1,0 +1,463 @@
+EESchema Schematic File Version 2
+LIBS:Control_board_library
+LIBS:power
+LIBS:device
+LIBS:switches
+LIBS:relays
+LIBS:motors
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:w_connectors
+LIBS:Control board-cache
+EELAYER 25 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 4 6
+Title "Power supply"
+Date "2018-07-05"
+Rev "1.0"
+Comp "Skoltech"
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L LM317A VR1
+U 1 1 5B323B9B
+P 2900 3650
+AR Path="/5B323B9B" Ref="VR1"  Part="1" 
+AR Path="/5B32335D/5B323B9B" Ref="VR1"  Part="1" 
+F 0 "VR1" H 2900 3700 60  0000 C CNN
+F 1 "LM317A" H 2900 3800 60  0000 C CNN
+F 2 "Control_board_footprints:SOT-223" H 2900 3650 60  0001 C CNN
+F 3 "" H 2900 3650 60  0001 C CNN
+	1    2900 3650
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R19
+U 1 1 5B324198
+P 3450 4000
+F 0 "R19" H 3600 4000 50  0000 C CNN
+F 1 "240" V 3450 4000 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 3380 4000 50  0001 C CNN
+F 3 "" H 3450 4000 50  0001 C CNN
+	1    3450 4000
+	1    0    0    -1  
+$EndComp
+$Comp
+L C C1
+U 1 1 5B32461A
+P 2300 4050
+F 0 "C1" H 2325 4150 50  0000 L CNN
+F 1 "0.1 µF" H 2325 3950 50  0000 L CNN
+F 2 "Capacitors_SMD:C_0805_HandSoldering" H 2338 3900 50  0001 C CNN
+F 3 "" H 2300 4050 50  0001 C CNN
+	1    2300 4050
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2300 3600 2300 3900
+Wire Wire Line
+	2300 4200 2300 4750
+Wire Wire Line
+	2900 4200 2900 4350
+Wire Wire Line
+	3300 3750 3900 3750
+Wire Wire Line
+	3450 3750 3450 3850
+Wire Wire Line
+	3450 4150 3450 4300
+Wire Wire Line
+	3450 4300 2900 4300
+Connection ~ 2900 4300
+$Comp
+L GNDA #PWR025
+U 1 1 5B3246BE
+P 2900 4750
+F 0 "#PWR025" H 2900 4500 50  0001 C CNN
+F 1 "GNDA" H 2900 4600 50  0000 C CNN
+F 2 "" H 2900 4750 50  0001 C CNN
+F 3 "" H 2900 4750 50  0001 C CNN
+	1    2900 4750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2300 4750 3900 4750
+$Comp
+L +12V #PWR026
+U 1 1 5B3247CA
+P 2300 3600
+F 0 "#PWR026" H 2300 3450 50  0001 C CNN
+F 1 "+12V" H 2300 3740 50  0000 C CNN
+F 2 "" H 2300 3600 50  0001 C CNN
+F 3 "" H 2300 3600 50  0001 C CNN
+	1    2300 3600
+	1    0    0    -1  
+$EndComp
+Connection ~ 2300 3750
+$Comp
+L +5V #PWR027
+U 1 1 5B3247FA
+P 3900 3600
+F 0 "#PWR027" H 3900 3450 50  0001 C CNN
+F 1 "+5V" H 3900 3740 50  0000 C CNN
+F 2 "" H 3900 3600 50  0001 C CNN
+F 3 "" H 3900 3600 50  0001 C CNN
+	1    3900 3600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3900 3600 3900 3950
+Connection ~ 3450 3750
+$Comp
+L CP1 C2
+U 1 1 5B32482C
+P 3900 4100
+F 0 "C2" H 3925 4200 50  0000 L CNN
+F 1 "1 µF" H 3925 4000 50  0000 L CNN
+F 2 "Capacitors_SMD:CP_Elec_4x5.3" H 3900 4100 50  0001 C CNN
+F 3 "" H 3900 4100 50  0001 C CNN
+	1    3900 4100
+	1    0    0    -1  
+$EndComp
+Connection ~ 3900 3750
+Wire Wire Line
+	3900 4750 3900 4250
+Wire Wire Line
+	2300 3750 2500 3750
+$Comp
+L LM317A VR2
+U 1 1 5B324BB0
+P 5400 3650
+AR Path="/5B324BB0" Ref="VR2"  Part="1" 
+AR Path="/5B32335D/5B324BB0" Ref="VR2"  Part="1" 
+F 0 "VR2" H 5400 3700 60  0000 C CNN
+F 1 "LM317A" H 5400 3800 60  0000 C CNN
+F 2 "Control_board_footprints:SOT-223" H 5400 3650 60  0001 C CNN
+F 3 "" H 5400 3650 60  0001 C CNN
+	1    5400 3650
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R20
+U 1 1 5B324BBC
+P 5950 4000
+F 0 "R20" H 6100 4000 50  0000 C CNN
+F 1 "240" V 5950 4000 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 5880 4000 50  0001 C CNN
+F 3 "" H 5950 4000 50  0001 C CNN
+	1    5950 4000
+	1    0    0    -1  
+$EndComp
+$Comp
+L C C3
+U 1 1 5B324BC2
+P 4800 4050
+F 0 "C3" H 4825 4150 50  0000 L CNN
+F 1 "0.1 µF" H 4825 3950 50  0000 L CNN
+F 2 "Capacitors_SMD:C_0805_HandSoldering" H 4838 3900 50  0001 C CNN
+F 3 "" H 4800 4050 50  0001 C CNN
+	1    4800 4050
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4800 3600 4800 3900
+Wire Wire Line
+	4800 4200 4800 4750
+Wire Wire Line
+	5400 4200 5400 4350
+Wire Wire Line
+	5800 3750 6400 3750
+Wire Wire Line
+	5950 3750 5950 3850
+Wire Wire Line
+	5950 4150 5950 4300
+Wire Wire Line
+	5950 4300 5400 4300
+Connection ~ 5400 4300
+$Comp
+L GNDA #PWR028
+U 1 1 5B324BD0
+P 5400 4750
+F 0 "#PWR028" H 5400 4500 50  0001 C CNN
+F 1 "GNDA" H 5400 4600 50  0000 C CNN
+F 2 "" H 5400 4750 50  0001 C CNN
+F 3 "" H 5400 4750 50  0001 C CNN
+	1    5400 4750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4800 4750 6400 4750
+$Comp
+L +12V #PWR029
+U 1 1 5B324BDB
+P 4800 3600
+F 0 "#PWR029" H 4800 3450 50  0001 C CNN
+F 1 "+12V" H 4800 3740 50  0000 C CNN
+F 2 "" H 4800 3600 50  0001 C CNN
+F 3 "" H 4800 3600 50  0001 C CNN
+	1    4800 3600
+	1    0    0    -1  
+$EndComp
+Connection ~ 4800 3750
+Wire Wire Line
+	6400 3600 6400 3950
+Connection ~ 5950 3750
+$Comp
+L CP1 C4
+U 1 1 5B324BEA
+P 6400 4100
+F 0 "C4" H 6425 4200 50  0000 L CNN
+F 1 "1 µF" H 6425 4000 50  0000 L CNN
+F 2 "Capacitors_SMD:CP_Elec_4x5.3" H 6400 4100 50  0001 C CNN
+F 3 "" H 6400 4100 50  0001 C CNN
+	1    6400 4100
+	1    0    0    -1  
+$EndComp
+Connection ~ 6400 3750
+Wire Wire Line
+	6400 4750 6400 4250
+Wire Wire Line
+	4800 3750 5000 3750
+$Comp
+L +3.3V #PWR030
+U 1 1 5B324C32
+P 6400 3600
+F 0 "#PWR030" H 6400 3450 50  0001 C CNN
+F 1 "+3.3V" H 6400 3740 50  0000 C CNN
+F 2 "" H 6400 3600 50  0001 C CNN
+F 3 "" H 6400 3600 50  0001 C CNN
+	1    6400 3600
+	1    0    0    -1  
+$EndComp
+$Comp
+L LM317A VR3
+U 1 1 5B3252D9
+P 7850 3650
+AR Path="/5B3252D9" Ref="VR3"  Part="1" 
+AR Path="/5B32335D/5B3252D9" Ref="VR3"  Part="1" 
+F 0 "VR3" H 7850 3700 60  0000 C CNN
+F 1 "LM317A" H 7850 3800 60  0000 C CNN
+F 2 "Control_board_footprints:SOT-223" H 7850 3650 60  0001 C CNN
+F 3 "" H 7850 3650 60  0001 C CNN
+	1    7850 3650
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R21
+U 1 1 5B3252E5
+P 8400 4000
+F 0 "R21" H 8550 4000 50  0000 C CNN
+F 1 "240" V 8400 4000 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 8330 4000 50  0001 C CNN
+F 3 "" H 8400 4000 50  0001 C CNN
+	1    8400 4000
+	1    0    0    -1  
+$EndComp
+$Comp
+L C C5
+U 1 1 5B3252EB
+P 7250 4050
+F 0 "C5" H 7275 4150 50  0000 L CNN
+F 1 "0.1 µF" H 7275 3950 50  0000 L CNN
+F 2 "Capacitors_SMD:C_0805_HandSoldering" H 7288 3900 50  0001 C CNN
+F 3 "" H 7250 4050 50  0001 C CNN
+	1    7250 4050
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7250 3600 7250 3900
+Wire Wire Line
+	7250 4200 7250 4750
+Wire Wire Line
+	7850 4200 7850 4350
+Wire Wire Line
+	8250 3750 8850 3750
+Wire Wire Line
+	8400 3750 8400 3850
+Wire Wire Line
+	8400 4150 8400 4300
+Wire Wire Line
+	8400 4300 7850 4300
+Connection ~ 7850 4300
+$Comp
+L GNDA #PWR031
+U 1 1 5B3252F9
+P 7850 4750
+F 0 "#PWR031" H 7850 4500 50  0001 C CNN
+F 1 "GNDA" H 7850 4600 50  0000 C CNN
+F 2 "" H 7850 4750 50  0001 C CNN
+F 3 "" H 7850 4750 50  0001 C CNN
+	1    7850 4750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7250 4750 8850 4750
+$Comp
+L +12V #PWR032
+U 1 1 5B325304
+P 7250 3600
+F 0 "#PWR032" H 7250 3450 50  0001 C CNN
+F 1 "+12V" H 7250 3740 50  0000 C CNN
+F 2 "" H 7250 3600 50  0001 C CNN
+F 3 "" H 7250 3600 50  0001 C CNN
+	1    7250 3600
+	1    0    0    -1  
+$EndComp
+Connection ~ 7250 3750
+Wire Wire Line
+	8850 3600 8850 3950
+Connection ~ 8400 3750
+$Comp
+L CP1 C6
+U 1 1 5B32530D
+P 8850 4100
+F 0 "C6" H 8875 4200 50  0000 L CNN
+F 1 "1 µF" H 8875 4000 50  0000 L CNN
+F 2 "Capacitors_SMD:CP_Elec_4x5.3" H 8850 4100 50  0001 C CNN
+F 3 "" H 8850 4100 50  0001 C CNN
+	1    8850 4100
+	1    0    0    -1  
+$EndComp
+Connection ~ 8850 3750
+Wire Wire Line
+	8850 4750 8850 4250
+Wire Wire Line
+	7250 3750 7450 3750
+$Comp
+L +9V #PWR033
+U 1 1 5B326044
+P 8850 3600
+F 0 "#PWR033" H 8850 3450 50  0001 C CNN
+F 1 "+9V" H 8850 3740 50  0000 C CNN
+F 2 "" H 8850 3600 50  0001 C CNN
+F 3 "" H 8850 3600 50  0001 C CNN
+	1    8850 3600
+	1    0    0    -1  
+$EndComp
+$Comp
+L Power_terminal P13
+U 1 1 5B32B11E
+P 5900 2550
+F 0 "P13" H 5850 2600 60  0000 C CNN
+F 1 "Power_terminal" H 5850 2700 60  0000 C CNN
+F 2 "Control_board_footprints:Power_Connector" H 5950 2550 60  0001 C CNN
+F 3 "" H 5950 2550 60  0001 C CNN
+	1    5900 2550
+	1    0    0    -1  
+$EndComp
+$Comp
+L GNDD #PWR034
+U 1 1 5B32B1A9
+P 5100 2850
+F 0 "#PWR034" H 5100 2600 50  0001 C CNN
+F 1 "GNDD" H 5100 2725 50  0000 C CNN
+F 2 "" H 5100 2850 50  0001 C CNN
+F 3 "" H 5100 2850 50  0001 C CNN
+	1    5100 2850
+	1    0    0    -1  
+$EndComp
+$Comp
+L GNDA #PWR035
+U 1 1 5B32B1DD
+P 5400 2850
+F 0 "#PWR035" H 5400 2600 50  0001 C CNN
+F 1 "GNDA" H 5400 2700 50  0000 C CNN
+F 2 "" H 5400 2850 50  0001 C CNN
+F 3 "" H 5400 2850 50  0001 C CNN
+	1    5400 2850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5100 2850 5100 2700
+Wire Wire Line
+	5100 2700 5550 2700
+Wire Wire Line
+	5400 2850 5400 2700
+Connection ~ 5400 2700
+$Comp
+L +12V #PWR036
+U 1 1 5B32B2D7
+P 5100 2500
+F 0 "#PWR036" H 5100 2350 50  0001 C CNN
+F 1 "+12V" H 5100 2640 50  0000 C CNN
+F 2 "" H 5100 2500 50  0001 C CNN
+F 3 "" H 5100 2500 50  0001 C CNN
+	1    5100 2500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5100 2500 5100 2600
+Wire Wire Line
+	5100 2600 5550 2600
+$Comp
+L R R29
+U 1 1 5B51CF60
+P 2900 4500
+F 0 "R29" H 3050 4500 50  0000 C CNN
+F 1 "720" V 2900 4500 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 2830 4500 50  0001 C CNN
+F 3 "" H 2900 4500 50  0001 C CNN
+	1    2900 4500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2900 4650 2900 4750
+Connection ~ 2900 4750
+$Comp
+L R R30
+U 1 1 5B51CD2D
+P 5400 4500
+F 0 "R30" H 5550 4500 50  0000 C CNN
+F 1 "390" V 5400 4500 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 5330 4500 50  0001 C CNN
+F 3 "" H 5400 4500 50  0001 C CNN
+	1    5400 4500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5400 4650 5400 4750
+Connection ~ 5400 4750
+$Comp
+L R R31
+U 1 1 5B51CF7C
+P 7850 4500
+F 0 "R31" H 8000 4500 50  0000 C CNN
+F 1 "1.5k" V 7850 4500 50  0000 C CNN
+F 2 "Resistors_SMD:R_0805_HandSoldering" V 7780 4500 50  0001 C CNN
+F 3 "" H 7850 4500 50  0001 C CNN
+	1    7850 4500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7850 4650 7850 4750
+Connection ~ 7850 4750
+$EndSCHEMATC
